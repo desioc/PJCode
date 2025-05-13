@@ -1,0 +1,3 @@
+public enum RuoloCalciatore {
+    PORTIERE, DIFENSORE, CENTROCAMPISTA, ATTACCANTE;
+}

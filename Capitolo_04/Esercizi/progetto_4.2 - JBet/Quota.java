@@ -1,0 +1,1 @@
+public record Quota(Risultato risultato, double valore) {}

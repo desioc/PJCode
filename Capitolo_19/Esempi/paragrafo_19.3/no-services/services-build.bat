@@ -1,0 +1,3 @@
+javac -d mods --module-source-path src src/com.claudiodesio.jpms.spi/module-info.java src/com.claudiodesio.jpms.spi/com.claudiodesio.jpms/spi/* src/com.claudiodesio.jpms.docs/module-info.java src/com.claudiodesio.jpms.docs/com.claudiodesio.jpms/docs/* src/com.claudiodesio.jpms.factory/module-info.java src/com.claudiodesio.jpms.factory/com.claudiodesio.jpms/factory/* src/com.claudiodesio.jpms.handlers/module-info.java src/com.claudiodesio.jpms.handlers/com.claudiodesio.jpms/handlers/* src/com.claudiodesio.jpms.client/module-info.java src/com.claudiodesio.jpms.client/com.claudiodesio.jpms/client/*
+pause;
+

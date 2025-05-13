@@ -1,0 +1,1 @@
+public record Libro(String titolo) {}

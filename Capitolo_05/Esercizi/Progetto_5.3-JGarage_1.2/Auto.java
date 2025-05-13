@@ -1,0 +1,1 @@
+public record Auto(String targa, Dimensione dimensione) {}

@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"<Unnamed>","c":"Calcolatrice","l":"Calcolatrice()","u":"%3Cinit%3E()"},{"p":"<Unnamed>","c":"Calcolatrice","l":"dividi(double, double)","u":"dividi(double,double)"},{"p":"<Unnamed>","c":"Calcolatrice","l":"dividi(Double, Double)","u":"dividi(java.lang.Double,java.lang.Double)"}];updateSearchResults();

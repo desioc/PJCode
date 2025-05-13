@@ -1,0 +1,5 @@
+Antipasto;1;Bruschette;5.00
+Primo;2;Spaghetti alla Carbonara;10.50
+Secondo;3;Bistecca alla Fiorentina;20.00
+Dolce;4;Tiramisu;6.00
+SecondoPersonalizzato;5;Tagliata con contorno;22.00

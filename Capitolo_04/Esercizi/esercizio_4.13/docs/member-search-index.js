@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"<Unnamed>","c":"Squadra","l":"calciatori"},{"p":"<Unnamed>","c":"Squadra","l":"gioca()"},{"p":"<Unnamed>","c":"Squadra","l":"nome"},{"p":"<Unnamed>","c":"Squadra","l":"NUMERO_MAX_CALCIATORI"},{"p":"<Unnamed>","c":"Squadra","l":"Squadra(String)","u":"%3Cinit%3E(java.lang.String)"}];updateSearchResults();

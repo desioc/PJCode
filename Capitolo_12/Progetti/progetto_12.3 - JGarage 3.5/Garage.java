@@ -1,0 +1,144 @@
+// classe Garage
+package com.jgarage.business;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+
+import com.jgarage.exception.PostoNonDisponibileException;
+import com.jgarage.model.Auto;
+import com.jgarage.model.Dimensione;
+import com.jgarage.model.Moto;
+import com.jgarage.model.Motorizzato;
+
+public class Garage {
+
+    private final Map<Dimensione, List<Auto>> parcheggiAuto;
+    private final List<Moto> parcheggiMoto;
+    private final Map<Dimensione, Integer> capacitaMassimaAuto;
+    private final int capacitaMassimaMoto;
+
+    public Garage() {
+        parcheggiAuto = new EnumMap<>(Dimensione.class);
+        parcheggiMoto = new ArrayList<>();
+        capacitaMassimaAuto = new EnumMap<>(Dimensione.class);
+
+        for (Dimensione d : Dimensione.values()) {
+            parcheggiAuto.put(d, new ArrayList<>());
+        }
+
+        capacitaMassimaAuto.put(Dimensione.PICCOLA, 2);
+        capacitaMassimaAuto.put(Dimensione.MEDIA, 2);
+        capacitaMassimaAuto.put(Dimensione.GRANDE, 2);
+        capacitaMassimaMoto = 2;
+    }
+
+    public void permettiAccesso(Motorizzato veicolo) {
+        if (veicolo instanceof Auto auto) {
+            List<Auto> lista = parcheggiAuto.get(auto.dimensione());
+            if (lista.size() < capacitaMassimaAuto.get(auto.dimensione())) {
+                lista.add(auto);
+            } else {
+                throw new PostoNonDisponibileException(
+                    "Posto non disponibile per auto di dimensione " + auto.dimensione());
+            }
+        } else if (veicolo instanceof Moto moto) {
+            if (!moto.accessori()) {
+                if (parcheggiMoto.size() < capacitaMassimaMoto) {
+                    parcheggiMoto.add(moto);
+                } else {
+                    List<Auto> postiPiccoli = parcheggiAuto.get(Dimensione.PICCOLA);
+                    if (postiPiccoli.size() < capacitaMassimaAuto.get(Dimensione.PICCOLA)) {
+                        postiPiccoli.add(new Auto(moto.targa(), Dimensione.PICCOLA));
+                    } else {
+                        throw new PostoNonDisponibileException("Posto non disponibile per moto senza accessori.");
+                    }
+                }
+            } else {
+                List<Auto> postiPiccoli = parcheggiAuto.get(Dimensione.PICCOLA);
+                if (postiPiccoli.size() < capacitaMassimaAuto.get(Dimensione.PICCOLA)) {
+                    postiPiccoli.add(new Auto(moto.targa(), Dimensione.PICCOLA));
+                } else {
+                    throw new PostoNonDisponibileException("Posto non disponibile per moto con accessori.");
+                }
+            }
+        }
+    }
+
+    public void permettiUscita(Motorizzato veicolo) {
+        if (veicolo instanceof Auto auto) {
+            parcheggiAuto.get(auto.dimensione()).remove(auto);
+        } else if (veicolo instanceof Moto moto) {
+            parcheggiMoto.remove(moto);
+            List<Auto> lista = parcheggiAuto.get(Dimensione.PICCOLA);
+            lista.removeIf(auto -> auto.targa().equals(moto.targa()));
+        }
+    }
+
+    public int numeroVeicoliParcheggiati() {
+        return parcheggiMoto.size() +
+               parcheggiAuto.values().stream()
+                            .mapToInt(List::size)
+                            .sum();
+    }
+
+
+    public boolean cercaVeicolo(String targa) {
+        for (Moto moto : parcheggiMoto) {
+            if (targa != null && targa.equals(moto.targa())) {
+                return true;
+            }
+        }
+        for (Dimensione d : parcheggiAuto.keySet()) {
+            for (Auto auto : parcheggiAuto.get(d)) {
+                if (targa != null && targa.equals(auto.targa())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public List<Motorizzato> ricerca(Predicate<Motorizzato> filtro) {
+        List<Motorizzato> risultati = new ArrayList<>();
+
+        // aggiungi tutte le moto parcheggiate realmente
+        for (Moto moto : parcheggiMoto) {
+            if (filtro.test(moto)) {
+                risultati.add(moto);
+            }
+        }
+
+        // aggiungi tutte le auto, ma considera che alcune rappresentano moto
+        for (Map.Entry<Dimensione, List<Auto>> entry : parcheggiAuto.entrySet()) {
+            Dimensione dim = entry.getKey();
+            for (Auto auto : entry.getValue()) {
+                if (dim == Dimensione.PICCOLA) {
+                    // Ricostruzione di moto simulate (sia con accessori che senza)
+                    Moto motoSimulata = new Moto(auto.targa(), true);
+                    if (filtro.test(motoSimulata)) {
+                        risultati.add(motoSimulata);
+                    }
+                } else {
+                    if (filtro.test(auto)) {
+                        risultati.add(auto);
+                    }
+                }
+            }
+        }
+
+        return risultati;
+    }
+
+    public Map<Dimensione, List<Auto>> getParcheggiAuto() {
+        return Collections.unmodifiableMap(parcheggiAuto);
+    }
+
+    public List<Moto> getParcheggiMoto() {
+        return Collections.unmodifiableList(parcheggiMoto);
+    }
+}

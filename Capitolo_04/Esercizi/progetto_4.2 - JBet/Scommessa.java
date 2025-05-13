@@ -1,0 +1,1 @@
+public record Scommessa(Partita partita, Puntata puntata) { }

@@ -1,0 +1,1 @@
+public record Quote(Quota sq1, Quota pareggio, Quota sq2) { }
